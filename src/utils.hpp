@@ -15,3 +15,7 @@ public:
     task_details(std::string* m_process, DWORD m_priority)
         : process(m_process->begin(), m_process->end()), priority(m_priority) {}
 };
+
+// namespace utils {
+
+// }
