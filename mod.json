@@ -1,0 +1,12 @@
+{
+	"geode": "4.6.2",
+	"gd": {
+		"win": "2.2074"
+	},
+	"id": "hbg1010.forcepriority",
+	"name": "ForcePriority",
+	"version": "v0.1.0",
+	"developer": "Hbg1010",
+	"description": "Lower the priority of other programs in gd",
+	"early-load": true
+}

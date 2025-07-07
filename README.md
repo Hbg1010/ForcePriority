@@ -1,0 +1,1 @@
+C++ Geode port of FoodyPriority. This is used to lower the priority of other programs to reduce lag.
