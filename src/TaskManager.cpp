@@ -1,10 +1,13 @@
-#include <Geode/Geode.hpp>
-#include "utils.hpp"
-#include <atomic>
-#include <vector>
-using namespace geode::prelude;
+#include "TaskManager.hpp"
 
-static HANDLE snapshot;
+HANDLE TaskManager::snapshot = nullptr;
+
+
+bool TaskManager::setSnapshot() {
+    snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (snapshot == INVALID_HANDLE_VALUE) snapshot = nullptr; // normalize on fail
+    return snapshot; // returns if creation is a success
+}
 
 /**
  * Finds an app's pid from a string
@@ -14,7 +17,7 @@ static HANDLE snapshot;
  * 
  * @return DWORD that can either be the ID of the app, or 0. 0 implies something went wrong or the app isn't running / discoverable.
  */
-DWORD getProcessIDFromString(const std::wstring& processName) {
+DWORD TaskManager::getProcessIDFromString(const std::wstring& processName) {
     // to be returned
     DWORD pid = 0;
     // HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -44,12 +47,12 @@ DWORD getProcessIDFromString(const std::wstring& processName) {
  * 
  * @return success of the program running
  */
-bool changePriority(DWORD pid, DWORD priorityMode) { 
+bool TaskManager::changePriority(DWORD pid, DWORD priorityMode) {
+    // improve this a lil eventually
     HANDLE hProcess = OpenProcess(PROCESS_SET_INFORMATION, FALSE, pid);
 
     if (hProcess == NULL) {
-        CloseHandle(hProcess);
-        log::debug(":(");
+        // logging here
         return false;
     }
 
@@ -58,30 +61,6 @@ bool changePriority(DWORD pid, DWORD priorityMode) {
     return output;
 }
 
-// used to boot the program
-$on_mod(Loaded) {
-    snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (snapshot == INVALID_HANDLE_VALUE) return;
+// void TaskManager::closeHandle() {
 
-    log::debug("sucessful load!");
-    
-    // turns string to w string so i remember later :)
-    //     const std::wstring wProcessName(processName.begin(), processName.end());
-    std::string process = "discord.exe";
-    task_details FirstTask(&process, BELOW_NORMAL_PRIORITY_CLASS);
-    DWORD pid = getProcessIDFromString(FirstTask.process);
-
-    log::debug("{}", pid);
-
-    if (pid) {
-        if (changePriority(pid, FirstTask.priority)) log::debug("what the skibidi");
-    }
-}
-
-// this thread is responsible for dropping the allocated vector
-void priorityRefreshThread(std::vector<task_details>* task_list) {
-    // do {
-
-    // } while 
-    delete task_list;
-}
+// }

@@ -8,5 +8,23 @@
 	"version": "v0.1.0",
 	"developer": "Hbg1010",
 	"description": "Lower the priority of other programs in gd",
-	"early-load": true
+	"early-load": true,
+	"settings": {
+		"refresh":{
+			"name": "Assert Priority",
+			"type": "bool",
+			"default": true,
+			"description": "refreshes priority of apps after a specified amount of seconds so specified apps don't attempt to change their priorities back"
+		},
+		"refresh_frequency": {
+			"name": "Refresh Time",
+			"type": "int",
+			"default": 5,
+			"enable-if": "refresh",
+			"min": 0,
+			"control": {
+				"slider":true
+			}
+		}
+	}	
 }

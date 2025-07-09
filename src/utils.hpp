@@ -2,6 +2,7 @@
 #include <tlhelp32.h>
 #include <windows.h>
 #include <tchar.h>
+#include <string>
 
 // too lazy to use a struct :sad:
 class task_details {
